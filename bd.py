@@ -8,11 +8,12 @@ metadata = db.MetaData()
 metadata.bind = engine
 metadata.reflect(bind=engine)
 
-alunos = db.Table("alunos", metadata,
-        db.Column('id', db.Integer, primary_key=True),
-        db.Column('nome', db.String), db.Column('turma', db.String), db.Column('obs', db.String))
+aluno = db.Table('aluno', metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('nome', db.String), db.Column('turma', db.String), db.Column('obs', db.String))
 
-print(alunos.columns.keys())
+metadata.create_all(engine)
+print(aluno.columns.keys())
 
 
 #aluno = db.Table("alunos", metadata,

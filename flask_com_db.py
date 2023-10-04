@@ -42,15 +42,10 @@ db.create_all()
 
     
 class Main(Resource):
-    def get():
-        #Pegamos todos os dados classe aluno
+    def get(self):
         alunos = Aluno.query.all()
         lista = []
-        #Aqui alunos se transforma em aluno e fica organizado linha por linha, listando um aluno por vez.
         for aluno in alunos:
-            print(aluno)
-            #aqui damos append no dicionario(adicionamos coluna por coluna. ex: {("id": aluno.id, "nome": "Alberico", "turma"="1tdss", "obs":"Prof")}
-            #fazemos isso para ficar um dicionario por linha, dentro de um json
             lista.append({'id': aluno.id, 'nome': aluno.nome, 'turma':aluno.turma, 'obs':aluno.obs})
         return jsonify(lista)
     def post(self):
@@ -61,9 +56,9 @@ class Main(Resource):
             novo_alunos = Aluno(nome=data["nome"], turma=data["turma"], obs=data["obs"])
             db.session.add(novo_alunos)
             db.session.commit()
-            return{"mensagem":"Aluno cadastrado com sucesso!"}, 201
+            return{"message":"Aluno cadastrado com sucesso!"}, 201
         else:
-            return{"mensagem":"Dadps incompletos"}, 400
+            return{"message":"Dadps incompletos"}, 400
     def put(self, id_aluno):
         #data veio em json
         data =  request.get_json()
@@ -77,9 +72,9 @@ class Main(Resource):
             if "obs" in data:
                 aluno.obs = data["obs"]
             db.session.commit()
-            return{"mensagem":"Aluno alterado com sucesso!"}, 200
+            return{"message":"Aluno alterado com sucesso!"}, 200
         else:
-            return{"mensagem":"Dadps incompletos"}, 404
+            return{"message":"Dadps incompletos"}, 404
     def delete(self, id_aluno):
         aluno = Aluno.query.get(id_aluno)
         if aluno:
@@ -93,4 +88,4 @@ class Main(Resource):
 api.add_resource(Main, "/", "/<id_aluno>")
 
 if __name__ == "__main__":
-    app.run(port=8080)
+    app.run(port=8081, debug=True)
