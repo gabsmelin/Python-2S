@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 
@@ -53,7 +53,19 @@ class Main(Resource):
             #fazemos isso para ficar um dicionario por linha, dentro de um json
             lista.append({'id': aluno.id, 'nome': aluno.nome, 'turma':aluno.turma, 'obs':aluno.obs})
         return jsonify(lista)
-   
+    def post(self):
+        #data veio em json
+        data =  request.get_json()
+        #Checar se meus parametros estão dentro do JSON(Colunas/Campos)
+        if "nome" in data and "turma" in data and "obs" in data:
+            novo_alunos = Aluno(nome=data["nome"], turma=data["turma"], obs=data["obs"])
+            db.session.add(novo_alunos)
+            db.session.commit()
+            return{"mensagem":"Aluno cadastrado com sucesso!"}, 201
+        else:
+            return{"mensagem":"Dadps incompletos"}, 400
+
+        
 
 api.add_resource(Main, "/<nome>")
 
