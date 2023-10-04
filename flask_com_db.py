@@ -64,10 +64,26 @@ class Main(Resource):
             return{"mensagem":"Aluno cadastrado com sucesso!"}, 201
         else:
             return{"mensagem":"Dadps incompletos"}, 400
-
+    def put(self, id_aluno):
+        #data veio em json
+        data =  request.get_json()
+        aluno = Aluno.query.get(id_aluno)
+        #Checar se meus parametros estão dentro do JSON(Colunas/Campos)
+        if aluno:
+            if "nome" in data:
+                aluno.nome = data["nome"]
+            if "turma" in data:
+                aluno.turma = data["turma"]
+            if "obs" in data:
+                aluno.obs = data["obs"]
+            db.session.commit()
+            return{"mensagem":"Aluno alterado com sucesso!"}, 200
+        else:
+            return{"mensagem":"Dadps incompletos"}, 404
+    
         
 
-api.add_resource(Main, "/<nome>")
+api.add_resource(Main, "/", "/<id_aluno>")
 
 if __name__ == "__main__":
     app.run(port=8080)
