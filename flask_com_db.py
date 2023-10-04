@@ -80,7 +80,14 @@ class Main(Resource):
             return{"mensagem":"Aluno alterado com sucesso!"}, 200
         else:
             return{"mensagem":"Dadps incompletos"}, 404
-    
+    def delete(self, id_aluno):
+        aluno = Aluno.query.get(id_aluno)
+        if aluno:
+            db.session.remove(aluno)
+            db.session.commit()
+            return {"message":"Aluno excluido com sucesso!"}, 200
+        else:
+            return {"message":"Aluno não encontrado."}, 404      
         
 
 api.add_resource(Main, "/", "/<id_aluno>")
